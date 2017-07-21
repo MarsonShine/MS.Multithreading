@@ -1,7 +1,12 @@
 ﻿using MS.Multithreading.BarrierDemo;
+using MS.Multithreading.Chapter4;
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Threading;
+using System.Threading.Tasks;
+using static MS.Multithreading.Chapter4.APMConvertTask;
+using static System.Console;
 
 namespace MS.Multithreading
 {
@@ -13,8 +18,12 @@ namespace MS.Multithreading
             //StartReaderWriterLockSlim();
             //StartSpinWait();
             //StartThreadPool();
-            StartThreadPoolByCountDownEvent();
-            Console.ReadLine();
+            //StartThreadPoolByCountDownEvent();
+            //StartThreadEnableCancellationOperation();
+            //startThreadEnableCancellationTimeoutOperation();
+            //StartChapter4();
+            StartEAPConvertTask();
+            ReadLine();
         }
 
         static void StartBarrier()
@@ -90,6 +99,108 @@ namespace MS.Multithreading
             ThreadPoolDemo.Start.UseThreadPool(numberOfOpertions);
             sw.Stop();
             Console.WriteLine($"Execution time using threads:{sw.ElapsedMilliseconds}");
+        }
+        static void StartThreadEnableCancellationOperation()
+        {
+            using (var cts = new CancellationTokenSource())
+            {
+                CancellationToken token = cts.Token;
+                ThreadPool.QueueUserWorkItem(_ => CancelOperation.Start.AsyncOperation1(token));
+                Thread.Sleep(TimeSpan.FromSeconds(2));
+                cts.Cancel();
+            }
+
+            using (var cts = new CancellationTokenSource())
+            {
+                CancellationToken token = cts.Token;
+                ThreadPool.QueueUserWorkItem(_ => CancelOperation.Start.AsyncOperation2(token));
+                Thread.Sleep(TimeSpan.FromSeconds(2));
+                cts.Cancel();
+            }
+
+            using (var cts = new CancellationTokenSource())
+            {
+                CancellationToken token = cts.Token;
+                ThreadPool.QueueUserWorkItem(_ => CancelOperation.Start.AsyncOperation3(token));
+                Thread.Sleep(TimeSpan.FromSeconds(2));
+                cts.Cancel();
+            }
+
+            Thread.Sleep(TimeSpan.FromSeconds(2));
+        }
+        static void startThreadEnableCancellationTimeoutOperation()
+        {
+            CancelOperation.TimeoutOperation.RunOperation(TimeSpan.FromSeconds(5));
+            CancelOperation.TimeoutOperation.RunOperation(TimeSpan.FromSeconds(7));
+        }
+        static void StartChapter4()
+        {
+            int threadId;
+            AsynchronousTask d = Test;
+            IncompatibleAsynchronousTask e = Test;
+            Console.WriteLine("Option 1");
+            Task<string> task = Task<string>.Factory.FromAsync(d.BeginInvoke("AsyncTaskThread", CallBack, "a delegate asynchronous call"), d.EndInvoke);
+            task.ContinueWith(t => Console.WriteLine("Callback is finished,now running acontinuation! Result:{0}", t.Result));
+            while (!task.IsCompleted)
+            {
+                Console.WriteLine(task.Status);
+                Thread.Sleep(TimeSpan.FromSeconds(0.5));
+            }
+            Console.WriteLine(task.Status);
+            Thread.Sleep(TimeSpan.FromSeconds(1));
+            Console.WriteLine("----------------------------------");
+            Console.WriteLine();
+            Console.WriteLine("Option 2");
+
+            task = Task<string>.Factory.FromAsync(d.BeginInvoke, d.EndInvoke, "AsyncTaskThread", "a delegate asynchrounous call");
+            while (!task.IsCompleted)
+            {
+                Console.WriteLine(task.Status);
+                Thread.Sleep(TimeSpan.FromSeconds(0.5));
+            }
+            Console.WriteLine(task.Status);
+            Thread.Sleep(TimeSpan.FromSeconds(1));
+
+            Console.WriteLine("-----------------------------------");
+            Console.WriteLine();
+            Console.WriteLine("Option 3");
+
+            IAsyncResult ar = e.BeginInvoke(out threadId, CallBack, "a delegate asynchronous call");
+            task = Task<string>.Factory.FromAsync(ar, _ => e.EndInvoke(out threadId, ar));
+            task.ContinueWith(t => Console.WriteLine("Task is completed,now running a continuation:Result {0},Threadid:{1}", t.Result, threadId));
+            while (!task.IsCompleted)
+            {
+                Console.WriteLine(task.Status);
+                Thread.Sleep(TimeSpan.FromSeconds(0.5));
+            }
+            Console.WriteLine(task.Status);
+            Thread.Sleep(TimeSpan.FromSeconds(1));
+        }
+        static void StartEAPConvertTask() {
+            var tcs = new TaskCompletionSource<int>();
+            var worker = new BackgroundWorker();
+            worker.DoWork += (sender, eventArgs) =>
+            {
+                eventArgs.Result = EAPConvertTask.TaskMethod("Background worker", 5);
+            };
+            worker.RunWorkerCompleted += (sender, eventArgs) =>
+            {
+                if (eventArgs.Error != null)
+                {
+                    tcs.SetException(eventArgs.Error);
+                }
+                else if (eventArgs.Cancelled)
+                {
+                    tcs.SetCanceled();
+                }
+                else
+                {
+                    tcs.SetResult((int)eventArgs.Result);
+                }
+            };
+            worker.RunWorkerAsync();
+            int result = tcs.Task.Result;
+            WriteLine("Result is: {0}", result);
         }
     }
 }
