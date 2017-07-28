@@ -1,4 +1,5 @@
-﻿using MS.Multithreading.BarrierDemo;
+﻿using MS.Multithreading.AsyncAwait;
+using MS.Multithreading.BarrierDemo;
 using MS.Multithreading.Chapter4;
 using System;
 using System.ComponentModel;
@@ -22,7 +23,8 @@ namespace MS.Multithreading
             //StartThreadEnableCancellationOperation();
             //startThreadEnableCancellationTimeoutOperation();
             //StartChapter4();
-            StartEAPConvertTask();
+            //StartEAPConvertTask();
+            StartAsyncAwaitModel();
             ReadLine();
         }
 
@@ -201,6 +203,11 @@ namespace MS.Multithreading
             worker.RunWorkerAsync();
             int result = tcs.Task.Result;
             WriteLine("Result is: {0}", result);
+        }
+        static void StartAsyncAwaitModel()
+        {
+            Task t = AsyncAwaiter.AsynchronousProcessing();
+            t.Wait();
         }
     }
 }
