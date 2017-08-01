@@ -53,6 +53,8 @@
     <Compile Include="CancelOperation\TimeoutOperation.cs" />
     <Compile Include="Chapter4\APMConvertTask.cs" />
     <Compile Include="Chapter4\EAPConvertTask.cs" />
+    <Compile Include="ConCurrentCollection\ConcurrentQueueExample.cs" />
+    <Compile Include="ConCurrentCollection\CustomTask.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReaderWriterLockSlimDemo\Start.cs" />
