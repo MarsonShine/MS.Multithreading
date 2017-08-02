@@ -4,3 +4,5 @@ C:\MSProject\MS.Multithreading\MS.Multithreading\bin\Debug\MS.Multithreading.pdb
 C:\MSProject\MS.Multithreading\MS.Multithreading\obj\Debug\MS.Multithreading.csprojResolveAssemblyReference.cache
 C:\MSProject\MS.Multithreading\MS.Multithreading\obj\Debug\MS.Multithreading.exe
 C:\MSProject\MS.Multithreading\MS.Multithreading\obj\Debug\MS.Multithreading.pdb
+C:\MSProject\MS.Multithreading\MS.Multithreading\bin\Debug\ImpromptuInterface.dll
+C:\MSProject\MS.Multithreading\MS.Multithreading\bin\Debug\ImpromptuInterface.xml

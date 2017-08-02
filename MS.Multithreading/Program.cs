@@ -26,6 +26,7 @@ namespace MS.Multithreading
             //StartEAPConvertTask();
             StartAsyncAwaitModel();
             ConCurrentCollection.ConcurrentQueueExample.Startup.RunProgram().Wait();
+            ConCurrentCollection.ConcurrentBagExample.Startup.Run();
             ReadLine();
         }
 
