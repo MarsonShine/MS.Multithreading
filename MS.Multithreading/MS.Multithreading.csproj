@@ -58,6 +58,9 @@
     <Compile Include="ConCurrentCollection\ConcurrentQueueExample.cs" />
     <Compile Include="ConCurrentCollection\CrawlingTask.cs" />
     <Compile Include="ConCurrentCollection\CustomTask.cs" />
+    <Compile Include="PLINQPartitioner\AggregateExpetionExample.cs" />
+    <Compile Include="PLINQPartitioner\AggregatorExample.cs" />
+    <Compile Include="PLINQPartitioner\PartitionerExample.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReaderWriterLockSlimDemo\Start.cs" />
