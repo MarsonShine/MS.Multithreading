@@ -58,6 +58,7 @@
     <Compile Include="ConCurrentCollection\ConcurrentQueueExample.cs" />
     <Compile Include="ConCurrentCollection\CrawlingTask.cs" />
     <Compile Include="ConCurrentCollection\CustomTask.cs" />
+    <Compile Include="ParallelPattern\BlockingCollectionStartup.cs" />
     <Compile Include="ParallelPattern\LazyGetValueForShareState.cs" />
     <Compile Include="PLINQPartitioner\AggregateExpetionExample.cs" />
     <Compile Include="PLINQPartitioner\AggregatorExample.cs" />
